@@ -1,0 +1,19 @@
+PODS:
+  - MBProgressHUD (0.9.2)
+  - MBProgressHUD+JDragon (0.0.1):
+    - MBProgressHUD (~> 0.9.2)
+
+DEPENDENCIES:
+  - MBProgressHUD+JDragon (from `../MBProgressHUD+JDragon.podspec`)
+
+EXTERNAL SOURCES:
+  MBProgressHUD+JDragon:
+    :path: "../MBProgressHUD+JDragon.podspec"
+
+SPEC CHECKSUMS:
+  MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
+  MBProgressHUD+JDragon: d77f809f29ba1717b18c8b457ba2268b3f9cf591
+
+PODFILE CHECKSUM: e8b6da277cd9e9c4af8e4594738b7e9b0c6d4f20
+
+COCOAPODS: 1.2.0.rc.1

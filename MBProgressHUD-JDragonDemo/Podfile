@@ -1,0 +1,22 @@
+# Uncomment the next line to define a global platform for your project
+platform :ios, '8.0'
+
+target 'MBProgressHUD-JDragonDemo' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for MBProgressHUD-JDragonDemo
+
+pod 'MBProgressHUD+JDragon', :path => '../MBProgressHUD+JDragon.podspec'  #指定podspec文件
+
+  target 'MBProgressHUD-JDragonDemoTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'MBProgressHUD-JDragonDemoUITests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
