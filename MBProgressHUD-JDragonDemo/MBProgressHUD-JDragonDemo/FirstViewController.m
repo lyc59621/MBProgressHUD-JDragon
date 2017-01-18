@@ -11,22 +11,31 @@
 
 @interface FirstViewController ()<UITableViewDelegate,UITableViewDataSource>
 
+@property(nonatomic,strong) NSArray  *titleArray;
+
 
 @end
 
 @implementation FirstViewController
-
+-(NSArray*)titleArray
+{
+    return @[@"window加载弹窗",@"view加载弹窗",@"window展示信息",@"view展示信息",@"成功展示弹窗",@"警告展示弹窗",@"错误展示弹窗",@"信息展示弹窗"];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
+    UITableView  *tab = [self.view viewWithTag:98];
+    tab.tableFooterView = [UIView new];
     // Do any additional setup after loading the view, typically from a nib.
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;
+    return 8;
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell  *cell = [tableView dequeueReusableCellWithIdentifier:@"cellone"];
+    cell.textLabel.text =self.titleArray[indexPath.row];
+
     return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -62,7 +71,7 @@
         default:
             break;
     }
-    [self performSelector:@selector(dismiss) withObject:nil afterDelay:3];
+    [self performSelector:@selector(dismiss) withObject:nil afterDelay:2];
 }
 -(void)dismiss
 {

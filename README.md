@@ -4,6 +4,9 @@ MBProgressHUD  封装
 ![badge-pod] ![badge-languages] ![badge-platforms] ![badge-mit]
 
 
+# 使用效果
+![](MBProgressHUD-JDragon.gif)
+
 ### user pod
 
 ```

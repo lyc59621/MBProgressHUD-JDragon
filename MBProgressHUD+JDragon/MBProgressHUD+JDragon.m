@@ -14,7 +14,7 @@
 {
     UIView  *view = isWindow? (UIView*)[UIApplication sharedApplication].delegate.window:[self getCurrentUIVC].view;
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
-    hud.labelText=message?message:@"加载中...";
+    hud.labelText=message?message:@"加载中.....";
     hud.labelFont=[UIFont systemFontOfSize:15];
     hud.removeFromSuperViewOnHide = YES;
     hud.dimBackground = NO;
