@@ -11,7 +11,7 @@ MBProgressHUD  封装
 
 ```
 
-pod 'MBProgressHUD+JDragon','~> 0.0.1'
+pod 'MBProgressHUD+JDragon'
 
 
 ```
