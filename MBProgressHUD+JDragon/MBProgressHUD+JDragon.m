@@ -86,7 +86,7 @@
 }
 + (void)showWarnMessage:(NSString *)Message
 {
-    [self showCustomIconInWindow:@"MBHUD_Success" message:Message];
+    [self showCustomIconInWindow:@"MBHUD_Warn" message:Message];
 }
 + (void)showCustomIconInWindow:(NSString *)iconName message:(NSString *)message
 {
@@ -107,8 +107,8 @@
 + (void)hideHUD
 {
     UIView  *winView =(UIView*)[UIApplication sharedApplication].delegate.window;
-    [self hideHUDForView:winView animated:YES];
-    [self hideHUDForView:[self getCurrentUIVC].view animated:YES];
+    [self hideAllHUDsForView:winView animated:YES];
+    [self hideAllHUDsForView:[self getCurrentUIVC].view animated:YES];
 }
 //获取当前屏幕显示的viewcontroller
 +(UIViewController *)getCurrentWindowVC
@@ -152,6 +152,10 @@
             return ((UINavigationController*)tabSelectVC).viewControllers.lastObject;
         }
         return tabSelectVC;
+    }else
+    if ([superVC isKindOfClass:[UINavigationController class]]) {
+        
+        return ((UINavigationController*)superVC).viewControllers.lastObject;  
     }
     return superVC;
 }

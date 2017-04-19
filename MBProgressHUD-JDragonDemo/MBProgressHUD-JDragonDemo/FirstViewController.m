@@ -25,7 +25,23 @@
     [super viewDidLoad];
     UITableView  *tab = [self.view viewWithTag:98];
     tab.tableFooterView = [UIView new];
+    
+    
+    UIBarButtonItem  *item = [[UIBarButtonItem  alloc]initWithTitle:@"aa" style:UIBarButtonItemStylePlain target:self action:@selector(didClickAction)];
+    
+    self.navigationItem.leftBarButtonItem = item;
+    
+
     // Do any additional setup after loading the view, typically from a nib.
+}
+-(void)didClickAction
+{
+    NSLog(@"dawwad");
+}
+-(void)didaaa
+{
+    NSLog(@"dddd");
+  
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
