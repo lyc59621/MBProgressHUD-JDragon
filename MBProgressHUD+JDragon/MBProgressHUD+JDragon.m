@@ -74,19 +74,23 @@
 
 + (void)showSuccessMessage:(NSString *)Message
 {
-    [self showCustomIconInWindow:@"MBHUD_Success" message:Message];
+    NSString *name =@"MBProgressHUD+JDragon.bundle/MBProgressHUD/MBHUD_Success";
+    [self showCustomIconInWindow:name message:Message];
 }
 + (void)showErrorMessage:(NSString *)Message
 {
-    [self showCustomIconInWindow:@"MBHUD_Error" message:Message];
+    NSString *name =@"MBProgressHUD+JDragon.bundle/MBProgressHUD/MBHUD_Error";
+    [self showCustomIconInWindow:name message:Message];
 }
 + (void)showInfoMessage:(NSString *)Message
 {
-    [self showCustomIconInWindow:@"MBHUD_Info" message:Message];
+    NSString *name =@"MBProgressHUD+JDragon.bundle/MBProgressHUD/MBHUD_Info";
+    [self showCustomIconInWindow:name message:Message];
 }
 + (void)showWarnMessage:(NSString *)Message
 {
-    [self showCustomIconInWindow:@"MBHUD_Warn" message:Message];
+    NSString *name =@"MBProgressHUD+JDragon.bundle/MBProgressHUD/MBHUD_Warn";
+    [self showCustomIconInWindow:name message:Message];
 }
 + (void)showCustomIconInWindow:(NSString *)iconName message:(NSString *)message
 {
@@ -100,9 +104,10 @@
 + (void)showCustomIcon:(NSString *)iconName message:(NSString *)message isWindow:(BOOL)isWindow
 {
     MBProgressHUD *hud  =  [self createMBProgressHUDviewWithMessage:message isWindiw:isWindow];
-    hud.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[@"MBProgressHUD+JDragon.bundle/MBProgressHUD" stringByAppendingPathComponent:iconName]]];
+    hud.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:iconName]];
     hud.mode = MBProgressHUDModeCustomView;
     [hud hide:YES afterDelay:1];
+    
 }
 + (void)hideHUD
 {
