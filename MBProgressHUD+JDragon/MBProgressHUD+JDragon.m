@@ -24,11 +24,11 @@
 
 + (void)showTipMessageInWindow:(NSString*)message
 {
-    [self showTipMessage:message isWindow:true timer:1];
+    [self showTipMessage:message isWindow:true timer:2];
 }
 + (void)showTipMessageInView:(NSString*)message
 {
-    [self showTipMessage:message isWindow:false timer:1];
+    [self showTipMessage:message isWindow:false timer:2];
 }
 + (void)showTipMessageInWindow:(NSString*)message timer:(int)aTimer
 {
@@ -42,7 +42,7 @@
 {
     MBProgressHUD *hud = [self createMBProgressHUDviewWithMessage:message isWindiw:isWindow];
     hud.mode = MBProgressHUDModeText;
-    [hud hide:YES afterDelay:1];
+    [hud hide:YES afterDelay:aTimer];
 }
 #pragma mark-------------------- show Activity----------------------------
 
@@ -106,7 +106,7 @@
     MBProgressHUD *hud  =  [self createMBProgressHUDviewWithMessage:message isWindiw:isWindow];
     hud.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:iconName]];
     hud.mode = MBProgressHUDModeCustomView;
-    [hud hide:YES afterDelay:1];
+    [hud hide:YES afterDelay:2];
     
 }
 + (void)hideHUD
@@ -115,54 +115,98 @@
     [self hideAllHUDsForView:winView animated:YES];
     [self hideAllHUDsForView:[self getCurrentUIVC].view animated:YES];
 }
+#pragma mark --- 获取当前Window试图---------
 //获取当前屏幕显示的viewcontroller
-+(UIViewController *)getCurrentWindowVC
++(UIViewController*)getCurrentWindowVC
 {
     UIViewController *result = nil;
     UIWindow * window = [[UIApplication sharedApplication] keyWindow];
-    if (window.windowLevel != UIWindowLevelNormal)
-    {
+    //app默认windowLevel是UIWindowLevelNormal，如果不是，找到它
+    if (window.windowLevel != UIWindowLevelNormal) {
         NSArray *windows = [[UIApplication sharedApplication] windows];
-        for(UIWindow * tempWindow in windows)
-        {
-            if (tempWindow.windowLevel == UIWindowLevelNormal)
-            {
-                window = tempWindow;
+        for(UIWindow * tmpWin in windows) {
+            if (tmpWin.windowLevel == UIWindowLevelNormal) {
+                window = tmpWin;
                 break;
             }
         }
     }
-    UIView *frontView = [[window subviews] objectAtIndex:0];
-    id nextResponder = [frontView nextResponder];
-    if ([nextResponder isKindOfClass:[UIViewController class]])
-    {
-        result = nextResponder;
+    id nextResponder = nil;
+    UIViewController *appRootVC = window.rootViewController;
+    //1、通过present弹出VC，appRootVC.presentedViewController不为nil
+    if (appRootVC.presentedViewController) {
+        nextResponder = appRootVC.presentedViewController;
+    }else{
+        //2、通过navigationcontroller弹出VC
+        //        NSLog(@"subviews == %@",[window subviews]);
+        UIView *frontView = [[window subviews] objectAtIndex:0];
+        nextResponder = [frontView nextResponder];
     }
-    else
-    {
-        result = window.rootViewController;
-    }
-    return  result;
+    return nextResponder;
 }
-+(UIViewController *)getCurrentUIVC
+
++(UINavigationController*)getCurrentNaVC
 {
-    UIViewController  *superVC = [[self class]  getCurrentWindowVC ];
     
-    if ([superVC isKindOfClass:[UITabBarController class]]) {
-        
-        UIViewController  *tabSelectVC = ((UITabBarController*)superVC).selectedViewController;
-        
-        if ([tabSelectVC isKindOfClass:[UINavigationController class]]) {
-            
-            return ((UINavigationController*)tabSelectVC).viewControllers.lastObject;
+    UIViewController  *viewVC = (UIViewController*)[ self getCurrentWindowVC ];
+    UINavigationController  *naVC;
+    if ([viewVC isKindOfClass:[UITabBarController class]]) {
+        UITabBarController  *tabbar = (UITabBarController*)viewVC;
+        naVC = (UINavigationController *)tabbar.viewControllers[tabbar.selectedIndex];
+        if (naVC.presentedViewController) {
+            while (naVC.presentedViewController) {
+                naVC = (UINavigationController*)naVC.presentedViewController;
+            }
         }
-        return tabSelectVC;
     }else
-    if ([superVC isKindOfClass:[UINavigationController class]]) {
+        if ([viewVC isKindOfClass:[UINavigationController class]]) {
+            
+            naVC  = (UINavigationController*)viewVC;
+            if (naVC.presentedViewController) {
+                while (naVC.presentedViewController) {
+                    naVC = (UINavigationController*)naVC.presentedViewController;
+                }
+            }
+        }else
+            if ([viewVC isKindOfClass:[UIViewController class]])
+            {
+                if (viewVC.navigationController) {
+                    return viewVC.navigationController;
+                }
+                return  (UINavigationController*)viewVC;
+            }
+    return naVC;
+}
+
++(UIViewController*)getCurrentUIVC
+{
+    UIViewController   *cc;
+    UINavigationController  *na = (UINavigationController*)[[self class] getCurrentNaVC];
+    if ([na isKindOfClass:[UINavigationController class]]) {
+        cc =  na.viewControllers.lastObject;
         
-        return ((UINavigationController*)superVC).viewControllers.lastObject;  
+        if (cc.childViewControllers.count>0) {
+            
+            cc = [[self class] getSubUIVCWithVC:cc];
+        }
+    }else
+    {
+        cc = (UIViewController*)na;
     }
-    return superVC;
+    return cc;
+}
++(UIViewController *)getSubUIVCWithVC:(UIViewController*)vc
+{
+    UIViewController   *cc;
+    cc =  vc.childViewControllers.lastObject;
+    if (cc.childViewControllers>0) {
+        
+        [[self class] getSubUIVCWithVC:cc];
+    }else
+    {
+        return cc;
+    }
+    return cc;
 }
 
 @end
