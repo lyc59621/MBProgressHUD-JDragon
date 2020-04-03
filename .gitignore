@@ -5,7 +5,7 @@
 ## Build generated
 build/
 DerivedData/
-
+upload.sh
 ## Various settings
 *.pbxuser
 !default.pbxuser
