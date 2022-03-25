@@ -140,13 +140,13 @@
     //1、通过present弹出VC，appRootVC.presentedViewController不为nil
         nextResponder = appRootVC.presentedViewController;
     }else
-    if (appRootVC.childViewControllers>0) {
-           nextResponder = appRootVC.childViewControllers[0];
+    if (appRootVC.childViewControllers.count>0) {
+           nextResponder = appRootVC.childViewControllers.firstObject;
     }else
     {
         //2、通过navigationcontroller弹出VC
         //        NSLog(@"subviews == %@",[window subviews]);
-        UIView *frontView = [[window subviews] objectAtIndex:0];
+        UIView *frontView = [[window subviews] firstObject];
         nextResponder = [frontView nextResponder];
     }
     return nextResponder;
@@ -206,7 +206,7 @@
 {
     UIViewController   *cc;
     cc =  vc.childViewControllers.lastObject;
-    if (cc.childViewControllers>0) {
+    if (cc.childViewControllers.count>0) {
         
         [[self class] getSubUIVCWithVC:cc];
     }else
