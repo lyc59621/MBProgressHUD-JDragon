@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "MBProgressHUD+JDragon"
-  s.version      = "0.0.5"
+  s.version      = "0.0.7"
   s.summary      = "MBProgressHUD 封装"
 
   # This description is used to generate tags and improve search results.
@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
   MBProgressHUD 简单封装
                    DESC
 
-  s.homepage     = "https://github.com/lyc59621//MBProgressHUD-JDragon"
+  s.homepage     = "https://github.com/eye1234456/MBProgressHUD-JDragon"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -80,7 +80,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/lyc59621/MBProgressHUD-JDragon.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/eye1234456/MBProgressHUD-JDragon.git", :tag => "#{s.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

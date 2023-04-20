@@ -12,7 +12,7 @@
 
 + (MBProgressHUD*)createMBProgressHUDviewWithMessage:(NSString*)message isWindiw:(BOOL)isWindow
 {
-    UIView  *view = isWindow? (UIView*)[UIApplication sharedApplication].delegate.window:[self getCurrentUIVC].view;
+    UIView  *view = isWindow? (UIView*)[self getCurrentWindow]:[self getCurrentUIVC].view;
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
     hud.labelText=message?message:@"加载中.....";
     hud.labelFont=[UIFont systemFontOfSize:15];
@@ -111,16 +111,37 @@
 }
 + (void)hideHUD
 {
-    UIView  *winView =(UIView*)[UIApplication sharedApplication].delegate.window;
+    UIView  *winView =(UIView*)[self getCurrentWindow];
     [self hideAllHUDsForView:winView animated:YES];
     [self hideAllHUDsForView:[self getCurrentUIVC].view animated:YES];
 }
 #pragma mark --- 获取当前Window试图---------
+//获取当前屏幕显示的window
++(UIWindow *)getCurrentWindow {
+    UIWindow * window = nil;
+    if ([UIApplication.sharedApplication respondsToSelector:@selector(keyWindow)]) {
+        window = UIApplication.sharedApplication.keyWindow;
+    }
+    if (window == nil && [UIApplication.sharedApplication.delegate respondsToSelector:@selector(window)]) {
+        window = UIApplication.sharedApplication.delegate.window;
+    }
+    //app默认windowLevel是UIWindowLevelNormal，如果不是，找到它
+    if (window == nil || window.windowLevel != UIWindowLevelNormal) {
+        NSArray *windows = [[UIApplication sharedApplication] windows];
+        for(UIWindow * tmpWin in windows) {
+            if (tmpWin.windowLevel == UIWindowLevelNormal) {
+                window = tmpWin;
+                break;
+            }
+        }
+    }
+    return window;
+}
 //获取当前屏幕显示的viewcontroller
 +(UIViewController*)getCurrentWindowVC
 {
     UIViewController *result = nil;
-    UIWindow * window = [[UIApplication sharedApplication] keyWindow];
+    UIWindow * window = [self getCurrentWindow];
     //app默认windowLevel是UIWindowLevelNormal，如果不是，找到它
     if (window.windowLevel != UIWindowLevelNormal) {
         NSArray *windows = [[UIApplication sharedApplication] windows];
@@ -140,13 +161,13 @@
     //1、通过present弹出VC，appRootVC.presentedViewController不为nil
         nextResponder = appRootVC.presentedViewController;
     }else
-    if (appRootVC.childViewControllers>0) {
-           nextResponder = appRootVC.childViewControllers[0];
+    if (appRootVC.childViewControllers.count>0) {
+           nextResponder = appRootVC.childViewControllers.firstObject;
     }else
     {
         //2、通过navigationcontroller弹出VC
         //        NSLog(@"subviews == %@",[window subviews]);
-        UIView *frontView = [[window subviews] objectAtIndex:0];
+        UIView *frontView = [[window subviews] firstObject];
         nextResponder = [frontView nextResponder];
     }
     return nextResponder;
@@ -206,7 +227,7 @@
 {
     UIViewController   *cc;
     cc =  vc.childViewControllers.lastObject;
-    if (cc.childViewControllers>0) {
+    if (cc.childViewControllers.count>0) {
         
         [[self class] getSubUIVCWithVC:cc];
     }else
